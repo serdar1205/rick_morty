@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:rick_morty/features/data/datasources/db/app_database.dart';
 import 'package:rick_morty/features/data/datasources/remote/characters_remote_datasource.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/theme_cubit/theme_cubit.dart';
 import 'core/network/api_provider.dart';
 import 'core/network/api_provider_impl.dart';
@@ -23,13 +23,12 @@ Future<void> initLocator() async {
 
   locator.registerSingleton<AppDataBase>(database);
 
-  final sharedPrefs = await SharedPreferences.getInstance();
-  locator.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
-
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 
   locator.registerFactory<ApiProvider>(() => ApiProviderImpl());
-  locator.registerSingleton<InternetBloc>(InternetBloc());
+
+  final internetChecker = InternetConnectionChecker.instance;
+  locator.registerSingleton<InternetBloc>(InternetBloc(internetChecker));
 
   ///Data source
 

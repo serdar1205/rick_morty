@@ -10,28 +10,21 @@ part 'internet_state.dart';
 class InternetBloc extends Bloc<InternetEvent, InternetState> {
   late StreamSubscription<InternetConnectionStatus> _connectivitySubscription;
 
-  final connectionChecker = InternetConnectionChecker.instance;
+  final InternetConnectionChecker connectionChecker;
 
-  bool hasInternet = false;
-
-  InternetBloc() : super(InternetInitial()) {
+  InternetBloc(this.connectionChecker) : super(InternetInitial()) {
     on<ConnectivityChanged>((event, emit) {
       if (event.isConnected) {
         emit(InternetConnected(event.isConnected));
-        hasInternet = true;
       } else {
         emit(InternetDisConnected());
-        hasInternet = false;
       }
     });
 
     _connectivitySubscription = connectionChecker.onStatusChange.listen(
       (InternetConnectionStatus status) {
-        if (status == InternetConnectionStatus.connected) {
-          add(ConnectivityChanged(true));
-        } else {
-          add(ConnectivityChanged(false));
-        }
+        add(ConnectivityChanged(status == InternetConnectionStatus.connected));
+
       },
     );
   }
