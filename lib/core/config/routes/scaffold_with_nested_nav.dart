@@ -38,7 +38,7 @@ class _ScaffoldWithNestedNavigationState
     super.didChangeDependencies();
     items = [
       BottomNavigationBarItem(
-        label: 'Home',
+        label: AppStrings.home,
         icon: buildIcon(Icons.home_outlined,
             color: Theme.of(context).colorScheme.outlineVariant),
         activeIcon: buildIcon(Icons.home, color: AppColors.mainbuttonColor2),
