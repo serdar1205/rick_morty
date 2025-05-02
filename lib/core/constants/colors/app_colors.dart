@@ -22,5 +22,5 @@ abstract class AppColors {
   static const Color textDarkColor = Color.fromRGBO(49, 44, 56, 1);
   static const Color textBlue = Colors.blue;
   static const Color textGrayColor = Color.fromRGBO(136, 141, 146, 1);
-  static const Color? likeColor = Color(0xFBFFBD2D);
+  static const Color likeColor = Color(0xFBFFBD2D);
 }
