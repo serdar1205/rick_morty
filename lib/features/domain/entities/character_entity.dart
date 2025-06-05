@@ -8,9 +8,9 @@ class CharacterEntity extends Equatable {
   final String gender;
   final String location;
   final String image;
-  bool isFavorite;
+  final bool isFavorite;
 
-  CharacterEntity({
+  const CharacterEntity({
     required this.id,
     required this.name,
     required this.species,
@@ -21,6 +21,19 @@ class CharacterEntity extends Equatable {
     required this.isFavorite,
   });
 
+  CharacterEntity copyWith({bool? isFavorite}) {
+    return CharacterEntity(
+      id: id,
+      name: name,
+      species: species,
+      type: type,
+      gender: gender,
+      location: location,
+      image: image,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,
@@ -30,5 +43,6 @@ class CharacterEntity extends Equatable {
         gender,
         location,
         image,
+        isFavorite,
       ];
 }

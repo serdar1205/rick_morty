@@ -8,16 +8,9 @@ class GetCharacters extends CharactersEvent {
   GetCharacters(this.page);
 }
 
-class AddCharacterToFavorite extends CharactersEvent {
-  final int id;
-
-  AddCharacterToFavorite(this.id);
-}
-
-class DeleteCharacterFromFavorites extends CharactersEvent {
-  final int id;
-
-  DeleteCharacterFromFavorites(this.id);
+class ToggleFavoriteStatus extends CharactersEvent {
+  final int characterId;
+  ToggleFavoriteStatus(this.characterId);
 }
 
 class DeleteAllCharacterFromFavorites extends CharactersEvent {

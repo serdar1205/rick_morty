@@ -10,15 +10,13 @@ class ApiProviderImpl implements ApiProvider {
   static Dio _initializeDio() {
     Dio dio = Dio(
       BaseOptions(
-        baseUrl: ApiEndpoints.baseUrl,
-        receiveDataWhenStatusError: true,
-        connectTimeout: const Duration(seconds: 20)
-      ),
+          baseUrl: ApiEndpoints.baseUrl,
+          receiveDataWhenStatusError: true,
+          connectTimeout: const Duration(seconds: 20)),
     );
 
     return dio;
   }
-
 
   @override
   Future<Response> get({
@@ -39,7 +37,6 @@ class ApiProviderImpl implements ApiProvider {
 
     dio.options.headers = {
       if (isMultiPart) 'Content-Type': 'application/json',
-      //'multipart/form-data',
       if (!isMultiPart) 'Content-Type': 'application/json',
       if (!isMultiPart) 'Accept': 'application/json',
       if (token != null) 'Authorization': 'Bearer $token',

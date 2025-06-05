@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_morty/core/config/theme_cubit/theme_cubit.dart';
 import 'package:rick_morty/core/constants/strings/app_strings.dart';
 import 'package:rick_morty/features/presentation/blocs/characters_bloc/characters_bloc.dart';
-import 'package:rick_morty/features/presentation/blocs/favorites_bloc/favorites_bloc.dart';
 import 'package:rick_morty/features/presentation/pages/components/all_characters.dart';
 import 'package:rick_morty/features/presentation/widgets/k_footer.dart';
 import 'package:rick_morty/locator.dart';
@@ -18,7 +17,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final charactersBloc = locator<CharactersBloc>();
-  final favoriteBloc = locator<FavoritesBloc>();
 
   int _currentPage = 1;
 
@@ -31,7 +29,6 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     charactersBloc.add(GetCharacters(_currentPage));
-    favoriteBloc.add(GetFavorites());
   }
 
   @override
@@ -82,13 +79,15 @@ class _MainPageState extends State<MainPage> {
         ),
         body: BlocListener<CharactersBloc, CharactersState>(
           listener: (context, state) {
-            // if (state is CharactersLoaded ||
-            //     state is CharactersError ||
-            //     state is CharactersConnectionError) {
-            //   _refreshController.refreshCompleted();
-            //   _refreshController.loadComplete();
-            // }
+            if (state is CharactersLoaded) {
+              _refreshController.refreshCompleted();
+              _refreshController.loadComplete();
+            } else if (state is CharactersError || state is CharactersConnectionError || !charactersBloc.canLoad) {
+              _refreshController.refreshFailed();
+              _refreshController.loadFailed();
+            }
           },
+
           child: SmartRefresher(
             controller: _refreshController,
             enablePullUp: charactersBloc.canLoad,

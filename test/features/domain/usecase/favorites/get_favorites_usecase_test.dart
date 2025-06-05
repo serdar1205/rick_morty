@@ -4,12 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rick_morty/core/usecase/usecase.dart';
 import 'package:rick_morty/features/data/models/character_model.dart';
-import 'package:rick_morty/features/domain/usecases/get_favorites_usecase.dart';
-import '../../../fixtures/json_reader.dart';
-import '../../helper/test_helper.mocks.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/get_favorites_usecase.dart';
+import '../../../../fixtures/json_reader.dart';
+import '../../../helper/test_helper.mocks.dart';
 
 void main() {
-  late MockCharacterRepository repository;
+  late MockFavoritesRepository repository;
   late GetFavoritesUseCase useCase;
 
   final jsonName = 'character';
@@ -19,7 +19,7 @@ void main() {
   responseBody.map((e) => CharacterModel.fromMap(e).toEntity()).toList();
 
   setUp(() {
-    repository = MockCharacterRepository();
+    repository = MockFavoritesRepository();
     useCase = GetFavoritesUseCase(repository: repository);
   });
 
