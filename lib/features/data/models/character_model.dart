@@ -1,4 +1,5 @@
 import 'package:rick_morty/features/data/datasources/local/entity/character_local_entity.dart';
+import 'package:rick_morty/features/data/datasources/local/entity/favorites_local_entity.dart';
 import 'package:rick_morty/features/domain/entities/character_entity.dart';
 
 class CharacterModel {
@@ -59,6 +60,19 @@ class CharacterModel {
 
   CharacterLocalEntity toCacheEntity() {
     return CharacterLocalEntity(
+      id: id,
+      name: name,
+      species: species,
+      type: type,
+      gender: gender,
+      location: location,
+      image: image,
+      isFavorite: isFavorite,
+    );
+  }
+
+  FavoritesLocalEntity toFavCacheEntity() {
+    return FavoritesLocalEntity(
       id: id,
       name: name,
       species: species,

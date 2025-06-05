@@ -1,11 +1,11 @@
-const String IMAGE_PATH = "assets/images";
-const String ICON_PATH = "assets/icons";
+const String imagePath = "assets/images";
+const String iconPath = "assets/icons";
 
 class ImageAssets {
-  static const noImage = "$IMAGE_PATH/image.png";
+  static const noImage = "$imagePath/image.png";
 }
 
 class IconsAssets {
-  static const search = "$ICON_PATH/search.svg";
-  static const comment = "$ICON_PATH/comment.svg";
+  static const search = "$iconPath/search.svg";
+  static const comment = "$iconPath/comment.svg";
 }

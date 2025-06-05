@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:rick_morty/features/domain/usecases/delete_favorite_one_usecase.dart';
-import '../../helper/test_helper.mocks.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/delete_favorite_one_usecase.dart';
+import '../../../helper/test_helper.mocks.dart';
 
 void main() {
-  late MockCharacterRepository repository;
+  late MockFavoritesRepository repository;
   late DeleteFavoriteOneUseCase useCase;
 
   setUp(() {
-    repository = MockCharacterRepository();
+    repository = MockFavoritesRepository();
     useCase = DeleteFavoriteOneUseCase(repository: repository);
   });
 

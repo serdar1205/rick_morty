@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rick_morty/core/network/internet_bloc/internet_bloc.dart';
 import 'package:rick_morty/features/presentation/blocs/characters_bloc/characters_bloc.dart';
 import 'core/config/routes/app_router.dart';
 import 'core/config/theme/app_theme.dart';
@@ -17,8 +16,6 @@ class AppStart extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider<ThemeCubit>(create: (context) => locator<ThemeCubit>()),
-          BlocProvider<InternetBloc>(
-              create: (context) => locator<InternetBloc>()),
           BlocProvider<CharactersBloc>(
               create: (context) => locator<CharactersBloc>()),
           BlocProvider<FavoritesBloc>(

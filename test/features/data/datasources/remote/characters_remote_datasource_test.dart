@@ -6,8 +6,8 @@ import 'package:rick_morty/core/constants/strings/endpoints.dart';
 import 'package:rick_morty/features/data/datasources/remote/characters_remote_datasource.dart';
 import 'package:rick_morty/features/data/models/character_model.dart';
 
-import '../../../fixtures/json_reader.dart';
-import '../../helper/test_helper.mocks.dart';
+import '../../../../fixtures/json_reader.dart';
+import '../../../helper/test_helper.mocks.dart';
 
 void main() {
   late MockApiProvider apiProvider;

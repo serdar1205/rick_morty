@@ -12,10 +12,30 @@ import 'package:internet_connection_checker/internet_connection_checker.dart'
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rick_morty/core/error/failure.dart' as _i8;
 import 'package:rick_morty/core/network/api_provider.dart' as _i5;
+import 'package:rick_morty/core/network/network.dart' as _i20;
+import 'package:rick_morty/features/data/datasources/local/dao/characters_dao.dart'
+    as _i12;
+import 'package:rick_morty/features/data/datasources/local/dao/favorites_dao.dart'
+    as _i14;
+import 'package:rick_morty/features/data/datasources/local/entity/character_local_entity.dart'
+    as _i13;
+import 'package:rick_morty/features/data/datasources/local/entity/favorites_local_entity.dart'
+    as _i15;
+import 'package:rick_morty/features/data/datasources/local/local_datasources/character_local_datasource.dart'
+    as _i18;
+import 'package:rick_morty/features/data/datasources/local/local_datasources/favorites_local_datasource.dart'
+    as _i19;
+import 'package:rick_morty/features/data/datasources/remote/characters_remote_datasource.dart'
+    as _i16;
+import 'package:rick_morty/features/data/models/character_model.dart' as _i17;
 import 'package:rick_morty/features/domain/entities/character_entity.dart'
     as _i9;
 import 'package:rick_morty/features/domain/reposotories/character_repository.dart'
     as _i7;
+import 'package:rick_morty/features/domain/reposotories/favorites_repository.dart'
+    as _i10;
+import 'package:rick_morty/features/domain/usecases/favorites/filter_favorites_usecase.dart'
+    as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -737,7 +757,13 @@ class MockCharacterRepository extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i4.Either<_i8.Failure, List<_i9.CharacterEntity>>>);
+}
 
+/// A class which mocks [FavoritesRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFavoritesRepository extends _i1.Mock
+    implements _i10.FavoritesRepository {
   @override
   _i6.Future<_i4.Either<_i8.Failure, bool>> addToFavorite(
           _i9.CharacterEntity? character) =>
@@ -793,6 +819,35 @@ class MockCharacterRepository extends _i1.Mock
           ) as _i6.Future<_i4.Either<_i8.Failure, List<_i9.CharacterEntity>>>);
 
   @override
+  _i6.Future<
+      _i4.Either<_i8.Failure, List<_i9.CharacterEntity>>> filterFavorites(
+          _i11.FilterCharacterParams? params) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #filterFavorites,
+          [params],
+        ),
+        returnValue: _i6
+            .Future<_i4.Either<_i8.Failure, List<_i9.CharacterEntity>>>.value(
+            _FakeEither_3<_i8.Failure, List<_i9.CharacterEntity>>(
+          this,
+          Invocation.method(
+            #filterFavorites,
+            [params],
+          ),
+        )),
+        returnValueForMissingStub: _i6
+            .Future<_i4.Either<_i8.Failure, List<_i9.CharacterEntity>>>.value(
+            _FakeEither_3<_i8.Failure, List<_i9.CharacterEntity>>(
+          this,
+          Invocation.method(
+            #filterFavorites,
+            [params],
+          ),
+        )),
+      ) as _i6.Future<_i4.Either<_i8.Failure, List<_i9.CharacterEntity>>>);
+
+  @override
   _i6.Future<_i4.Either<_i8.Failure, bool>> deleteFavorites() =>
       (super.noSuchMethod(
         Invocation.method(
@@ -843,4 +898,209 @@ class MockCharacterRepository extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i4.Either<_i8.Failure, bool>>);
+}
+
+/// A class which mocks [CharactersDao].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCharactersDao extends _i1.Mock implements _i12.CharactersDao {
+  @override
+  _i6.Future<void> insertCharacter(_i13.CharacterLocalEntity? news) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertCharacter,
+          [news],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<List<_i13.CharacterLocalEntity>?> getAllCharacters() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllCharacters,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i13.CharacterLocalEntity>?>.value(),
+        returnValueForMissingStub:
+            _i6.Future<List<_i13.CharacterLocalEntity>?>.value(),
+      ) as _i6.Future<List<_i13.CharacterLocalEntity>?>);
+
+  @override
+  _i6.Future<void> deleteAll() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteAll,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FavoritesDao].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFavoritesDao extends _i1.Mock implements _i14.FavoritesDao {
+  @override
+  _i6.Future<void> insertFavorite(_i15.FavoritesLocalEntity? news) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertFavorite,
+          [news],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<List<_i15.FavoritesLocalEntity>?> getFavorites() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFavorites,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i15.FavoritesLocalEntity>?>.value(),
+        returnValueForMissingStub:
+            _i6.Future<List<_i15.FavoritesLocalEntity>?>.value(),
+      ) as _i6.Future<List<_i15.FavoritesLocalEntity>?>);
+
+  @override
+  _i6.Future<void> deleteFavoriteOne(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteFavoriteOne,
+          [id],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> deleteFavorites() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteFavorites,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [CharactersRemoteDatasource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCharactersRemoteDatasource extends _i1.Mock
+    implements _i16.CharactersRemoteDatasource {
+  @override
+  _i6.Future<List<_i17.CharacterModel>> getAllCharacters(int? page) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllCharacters,
+          [page],
+        ),
+        returnValue: _i6.Future<List<_i17.CharacterModel>>.value(
+            <_i17.CharacterModel>[]),
+        returnValueForMissingStub: _i6.Future<List<_i17.CharacterModel>>.value(
+            <_i17.CharacterModel>[]),
+      ) as _i6.Future<List<_i17.CharacterModel>>);
+}
+
+/// A class which mocks [CharactersLocalDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCharactersLocalDataSource extends _i1.Mock
+    implements _i18.CharactersLocalDataSource {
+  @override
+  _i6.Future<void> insertCharacter(_i13.CharacterLocalEntity? character) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertCharacter,
+          [character],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<List<_i13.CharacterLocalEntity>?> getAllCharacters() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllCharacters,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i13.CharacterLocalEntity>?>.value(),
+        returnValueForMissingStub:
+            _i6.Future<List<_i13.CharacterLocalEntity>?>.value(),
+      ) as _i6.Future<List<_i13.CharacterLocalEntity>?>);
+
+  @override
+  _i6.Future<void> deleteAll() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteAll,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FavoritesLocalDatasource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFavoritesLocalDatasource extends _i1.Mock
+    implements _i19.FavoritesLocalDatasource {
+  @override
+  _i6.Future<void> insertFavorite(_i15.FavoritesLocalEntity? news) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertFavorite,
+          [news],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<List<_i15.FavoritesLocalEntity>?> getFavorites() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFavorites,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i15.FavoritesLocalEntity>?>.value(),
+        returnValueForMissingStub:
+            _i6.Future<List<_i15.FavoritesLocalEntity>?>.value(),
+      ) as _i6.Future<List<_i15.FavoritesLocalEntity>?>);
+
+  @override
+  _i6.Future<void> deleteFavoriteOne(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteFavoriteOne,
+          [id],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> deleteFavorites() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteFavorites,
+          [],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [NetworkInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfo extends _i1.Mock implements _i20.NetworkInfo {
+  @override
+  _i6.Future<bool> get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: _i6.Future<bool>.value(false),
+        returnValueForMissingStub: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
 }
