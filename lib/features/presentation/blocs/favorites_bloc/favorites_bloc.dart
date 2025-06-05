@@ -1,109 +1,74 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_morty/core/usecase/usecase.dart';
 import 'package:rick_morty/features/domain/entities/character_entity.dart';
-import 'package:rick_morty/features/domain/usecases/add_favorites_usecase.dart';
-import 'package:rick_morty/features/domain/usecases/delete_favorite_one_usecase.dart';
-import 'package:rick_morty/features/domain/usecases/delete_favorites_usecase.dart';
-import 'package:rick_morty/features/domain/usecases/get_favorites_usecase.dart';
-import 'package:rick_morty/features/presentation/blocs/characters_bloc/characters_bloc.dart';
-import 'package:rick_morty/features/presentation/widgets/sort_characters_widget.dart';
-import 'package:rick_morty/locator.dart';
+import 'package:rick_morty/features/domain/enums/sort_enums.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/add_favorites_usecase.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/delete_favorite_one_usecase.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/delete_favorites_usecase.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/filter_favorites_usecase.dart';
+import 'package:rick_morty/features/domain/usecases/favorites/get_favorites_usecase.dart';
 
 part 'favorites_event.dart';
 
 part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
-  FavoritesBloc() : super(FavoritesLoading()) {
+  FavoritesBloc(
+      this._getFavoritesUseCase,
+      this._deleteFavoritesUseCase,
+      this._deleteFavoriteOneUseCase,
+      this._addFavoritesUseCase,
+      this._filterFavoritesUseCase)
+      : super(FavoritesLoading()) {
     on<GetFavorites>(_onGetFavorites);
     on<DeleteFavorites>(_onDeleteFavorites);
-    on<DeleteFavoritesOne>(_onDeleteFavoriteOne);
-    on<AddToFavorites>(_onAddToFavorites);
-    on<SortFavorites>(_onSortFavorites);
+    on<ToggleFavorites>(_onToggleFavorites);
+    on<FilterFavorites>(_onFilterFavorites);
   }
 
-  final GetFavoritesUseCase _getFavoritesUseCase =
-      GetFavoritesUseCase(repository: locator());
-  final DeleteFavoritesUseCase _deleteFavoritesUseCase =
-      DeleteFavoritesUseCase(repository: locator());
-  final DeleteFavoriteOneUseCase _deleteFavoriteOneUseCase =
-      DeleteFavoriteOneUseCase(repository: locator());
-  final AddFavoritesUseCase _addFavoritesUseCase =
-      AddFavoritesUseCase(repository: locator());
+  final GetFavoritesUseCase _getFavoritesUseCase;
+  final DeleteFavoritesUseCase _deleteFavoritesUseCase;
 
-  final characterBloc = locator<CharactersBloc>();
+  final DeleteFavoriteOneUseCase _deleteFavoriteOneUseCase;
+  final AddFavoritesUseCase _addFavoritesUseCase;
 
-  final List<CharacterEntity> favorites = List.empty(growable: true);
-  List<CharacterEntity> sortedFavorites = [];
+  final FilterFavoritesUseCase _filterFavoritesUseCase;
+
+  final List<int> allFavoriteIds = [];
 
   CharacterGenders selectedGender = CharacterGenders.all;
 
   CharacterLocations selectedLocation = CharacterLocations.all;
 
-  String? gender;
-  String? location;
-  String? other;
+  Future<void> _onFilterFavorites(
+      FilterFavorites event, Emitter<FavoritesState> emit) async {
+    selectedGender = event.params.genderFilter;
+    selectedLocation = event.params.locationFilter;
 
-  final male = 'Male';
-  final female = 'Female';
-  final earth = 'Earth';
-  final planet = 'other';
+    emit(FavoritesLoading());
 
-  void selectGender(CharacterGenders genders) {
-    switch (genders) {
-      case CharacterGenders.all:
-        gender = null;
-        break;
-      case CharacterGenders.male:
-        gender = male;
-        break;
-      case CharacterGenders.female:
-        gender = female;
-        break;
-    }
+    final result = await _filterFavoritesUseCase.execute(
+      FilterCharacterParams(
+        genderFilter: selectedGender,
+        locationFilter: selectedLocation,
+      ),
+    );
 
-    selectedGender = genders;
-    applyFilters();
-  }
-
-  void selectLocation(CharacterLocations locations) {
-    switch (locations) {
-      case CharacterLocations.all:
-        location = null;
-        other = null;
-        break;
-      case CharacterLocations.earth:
-        location = earth;
-        other = null;
-        break;
-      case CharacterLocations.others:
-        location = null;
-        other = planet;
-        break;
-    }
-
-    selectedLocation = locations;
-    applyFilters();
-  }
-
-  void applyFilters() {
-    sortedFavorites = favorites.where((e) {
-      final matchesGender = gender == null || e.gender == gender;
-      final matchesLocation = location == null
-          ? other == null || !e.location.contains(earth)
-          : e.location.contains(location!);
-
-      return matchesGender && matchesLocation;
-    }).toList();
-  }
-
-  Future<void> _onSortFavorites(
-      SortFavorites event, Emitter<FavoritesState> emit) async {
-    emit(FavoritesLoaded(sortedFavorites.toList()));
+    result.fold(
+      (failure) => emit(FavoritesError()),
+      (filteredList) {
+        if (filteredList.isEmpty) {
+          emit(FavoritesEmpty());
+        } else {
+          emit(FavoritesLoaded(filteredList));
+        }
+      },
+    );
   }
 
   Future<void> _onGetFavorites(
       GetFavorites event, Emitter<FavoritesState> emit) async {
+    allFavoriteIds.clear();
     final result = await _getFavoritesUseCase.execute(NoParams());
 
     result.fold((failure) {
@@ -112,15 +77,11 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       if (success.isEmpty) {
         emit(FavoritesEmpty());
       } else {
-        favorites.clear();
-        favorites.addAll(success);
-        selectedGender = CharacterGenders.all;
-        selectedLocation = CharacterLocations.all;
-        location = earth;
-        other = null;
-        gender = null;
-
         emit(FavoritesLoaded(success));
+
+        for (var item in success) {
+          allFavoriteIds.add(item.id);
+        }
       }
     });
   }
@@ -134,52 +95,31 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     }, (success) {
       if (success) {
         emit(FavoritesEmpty());
-        favorites.clear();
-        selectedGender = CharacterGenders.all;
-        selectedLocation = CharacterLocations.all;
-        location = earth;
-        other = null;
-        gender = null;
-
-        characterBloc.add(DeleteAllCharacterFromFavorites());
       }
     });
   }
 
-  Future<void> _onDeleteFavoriteOne(
-      DeleteFavoritesOne event, Emitter<FavoritesState> emit) async {
-    final result = await _deleteFavoriteOneUseCase.execute(event.id);
+  Future<void> _onToggleFavorites(
+      ToggleFavorites event, Emitter<FavoritesState> emit) async {
+    final isFavorite = allFavoriteIds.contains(event.character.id);
 
-    result.fold((failure) {
-      emit(FavoritesError());
-    }, (success) {
-      if (success) {
-        favorites.removeWhere((item) => item.id == event.id);
-
-        if (favorites.isEmpty) {
-          emit(FavoritesEmpty());
-        } else {
-          emit(FavoritesLoaded(favorites.toList()));
-        }
-
-        characterBloc.add(DeleteCharacterFromFavorites(event.id));
-      }
-    });
-  }
-
-  Future<void> _onAddToFavorites(
-      AddToFavorites event, Emitter<FavoritesState> emit) async {
-    final result = await _addFavoritesUseCase.execute(event.character);
-
-    result.fold((failure) {
-      emit(FavoritesError());
-    }, (success) {
-      if (success) {
-        favorites.add(event.character);
-        emit(FavoritesLoaded(favorites.toList()));
-
-        characterBloc.add(AddCharacterToFavorite(event.character.id));
-      }
-    });
+    if (isFavorite) {
+      final result =
+          await _deleteFavoriteOneUseCase.execute(event.character.id);
+      result.fold(
+        (failure) => emit(FavoritesError()),
+        (success) {
+          if (success) add(GetFavorites());
+        },
+      );
+    } else {
+      final result = await _addFavoritesUseCase.execute(event.character);
+      result.fold(
+        (failure) => emit(FavoritesError()),
+        (success) {
+          if (success) add(GetFavorites());
+        },
+      );
+    }
   }
 }

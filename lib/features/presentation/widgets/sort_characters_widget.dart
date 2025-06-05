@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rick_morty/core/constants/colors/app_colors.dart';
+import 'package:rick_morty/features/domain/enums/sort_enums.dart';
 
 import 'sort_button.dart';
 
-enum CharacterGenders { all, male, female }
 
-enum CharacterLocations { all, earth, others }
 
 class SortBooksWidget extends StatelessWidget {
   const SortBooksWidget({

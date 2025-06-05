@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:rick_morty/core/error/failure.dart';
 import 'package:rick_morty/core/usecase/usecase.dart';
-import 'package:rick_morty/features/domain/reposotories/character_repository.dart';
+import 'package:rick_morty/features/domain/reposotories/favorites_repository.dart';
 
 class DeleteFavoritesUseCase extends BaseUseCase<NoParams, bool> {
-  final CharacterRepository repository;
+  final FavoritesRepository repository;
 
   DeleteFavoritesUseCase({required this.repository});
 

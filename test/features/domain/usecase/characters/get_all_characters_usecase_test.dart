@@ -3,9 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rick_morty/features/data/models/character_model.dart';
-import 'package:rick_morty/features/domain/usecases/get_all_characters_usecase.dart';
-import '../../../fixtures/json_reader.dart';
-import '../../helper/test_helper.mocks.dart';
+import 'package:rick_morty/features/domain/usecases/characters/get_all_characters_usecase.dart';
+import '../../../../fixtures/json_reader.dart';
+import '../../../helper/test_helper.mocks.dart';
 
 void main() {
   late MockCharacterRepository repository;
