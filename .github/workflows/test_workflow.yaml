@@ -6,8 +6,6 @@ on:
         required: true
         default: '3.27.3'
         type: string
-env:
-  FLUTTER_VERSION: ${{ inputs.flutter-version }}
 
 jobs:
   test:
@@ -20,7 +18,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: ${{ inputs.flutter-version }}
           cache: true  # Caches Flutter SDK
 
       - name: Cache Flutter dependencies
