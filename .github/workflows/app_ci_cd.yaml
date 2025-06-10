@@ -1,6 +1,8 @@
 name: App CI CD
 on:
   workflow_dispatch:
+  push:
+    branches: [hotfix]
 
 env:
   FLUTTER_VERSION: '3.27.3'
