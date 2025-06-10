@@ -1,0 +1,19 @@
+name: Main Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches: [hotfix]
+
+env:
+  FLUTTER_VERSION: '3.27.3'
+
+jobs:
+  run-test:
+    uses: ./.github/workflows/test_workflow.yaml
+    with:
+      flutter-version: ${{ env.FLUTTER_VERSION }}
+
+
+
+
+

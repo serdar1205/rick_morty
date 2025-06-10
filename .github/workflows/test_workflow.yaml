@@ -1,11 +1,13 @@
-name: App CI CD
+name: Test Job
 on:
-  workflow_dispatch:
-  push:
-    branches: [hotfix]
-
+  workflow_call:
+    inputs:
+      flutter-version:
+        required: true
+        default: '3.27.3'
+        type: string
 env:
-  FLUTTER_VERSION: '3.27.3'
+  FLUTTER_VERSION: ${{ inputs.flutter-version }}
 
 jobs:
   test:
@@ -38,6 +40,3 @@ jobs:
 
       - name: Run test
         run: flutter test
-
-
-
