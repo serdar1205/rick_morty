@@ -12,6 +12,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Checkout code
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/setup-flutter
         with:
           flutter-version: ${{ inputs.flutter-version }}
