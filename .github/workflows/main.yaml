@@ -1,0 +1,60 @@
+name: Main Workflow
+on:
+  workflow_dispatch:
+
+  pull_request:
+    types: [ opened, edited ]
+    branches: [ main, development, hotfix ]
+    paths-ignore:
+      - '**.md'
+
+  push:
+    branches:
+      - main
+      - development
+      - hotfix
+      - feature/**
+    paths:
+      - "lib/**"
+      - 'android/**'
+      - 'ios/**'
+      - "pubspec.yaml"
+      - ".github/workflows/**"
+
+
+jobs:
+  run-test:
+    if: |
+      github.ref == 'refs/heads/hotfix' ||
+      github.ref == 'refs/heads/development' ||
+      startsWith(github.ref, 'refs/heads/feature/')
+    uses: ./.github/workflows/test_workflow.yaml
+    with:
+      flutter-version: '3.27.3'
+
+  build-android:
+    if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
+    needs: run-test
+    uses: ./.github/workflows/build_android_workflow.yaml
+    with:
+      flutter-version: '3.27.3'
+
+  build-ios:
+    if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
+    needs: run-test
+    uses: ./.github/workflows/build_ios_workflow.yaml
+    with:
+      flutter-version: '3.27.3'
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    needs: [ build-android, build-ios ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Production
+        run: echo "🚀 Deploying to production..."
+
+
+
+
+
