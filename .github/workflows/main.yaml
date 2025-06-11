@@ -35,6 +35,7 @@ jobs:
   build-android:
     if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
     needs: run-test
+
     uses: ./.github/workflows/build_android_workflow.yaml
     with:
       flutter-version: '3.27.3'
@@ -42,6 +43,7 @@ jobs:
   build-ios:
     if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
     needs: run-test
+
     uses: ./.github/workflows/build_ios_workflow.yaml
     with:
       flutter-version: '3.27.3'
@@ -49,6 +51,7 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/main'
     needs: [ build-android, build-ios ]
+
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Production
