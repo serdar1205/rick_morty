@@ -15,6 +15,7 @@ jobs:
       - name: Checkout code
       - uses: actions/checkout@v4
 
+      - name: Set up Flutter
       - uses: ./.github/actions/setup-flutter
         with:
           flutter-version: ${{ inputs.flutter-version }}
