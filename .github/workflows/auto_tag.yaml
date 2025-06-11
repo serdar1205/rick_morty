@@ -44,16 +44,22 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
 
+      - name: Check if tag exists
+        id: tag_exists
+        run: |
+          if git rev-parse ${{ steps.bump.outputs.new_tag }} >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Git Tag and Push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.tag_exists.outputs.exists == 'false'
         run: |
           git tag ${{ steps.bump.outputs.new_tag }}
-
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
-
           git push origin ${{ steps.bump.outputs.new_tag }}
       
+
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
