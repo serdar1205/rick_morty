@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/setup-flutter
+      - uses: ./.github/actions/setup-flutter/action.yaml
         with:
           flutter-version: ${{ inputs.flutter-version }}
 

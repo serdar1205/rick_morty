@@ -28,17 +28,19 @@ jobs:
       - name: Bump Version
         id: bump
         run: |
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.get_tag.outputs.tag#v }}"
-
+          tag="${{ steps.get_tag.outputs.tag }}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${tag#v}"
+          
           if [[ "${GITHUB_REF##*/}" == "main" ]]; then
             ((MINOR+=1))
             PATCH=0
           else
             ((PATCH+=1))
           fi
-
+          
           new_tag="v$MAJOR.$MINOR.$PATCH"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+
 
       - name: Create Git Tag and Push
         run: |
