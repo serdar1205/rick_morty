@@ -5,8 +5,9 @@ on:
     branches:
       - main
       - hotfix
+
 permissions:
-  contents: write
+  contents: write  # allow pushing tags and creating releases
 
 jobs:
   auto-tag:
@@ -15,6 +16,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Fetch all tags
+        run: git fetch --tags
 
       - name: Set up Git
         run: |
@@ -43,7 +47,6 @@ jobs:
           new_tag="v$MAJOR.$MINOR.$PATCH"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
-
       - name: Check if tag exists
         id: tag_exists
         run: |
@@ -58,8 +61,6 @@ jobs:
         run: |
           git tag ${{ steps.bump.outputs.new_tag }}
           git push origin ${{ steps.bump.outputs.new_tag }}
-      
-
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
