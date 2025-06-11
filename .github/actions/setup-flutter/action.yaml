@@ -6,17 +6,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Get code
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Set up Flutter
-    - uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@v2
       with:
         flutter-version: ${{ inputs.flutter-version }}
         cache: true
 
     - name: Cache Flutter dependencies
-    - uses: actions/cache@v4
+      uses: actions/cache@v4
       with:
         path: |
           ~/.pub-cache
@@ -25,4 +25,4 @@ runs:
         restore-keys: ${{ runner.os }}-flutter
 
     - name: Install dependencies
-    - run: flutter pub get
+      run: flutter pub get
