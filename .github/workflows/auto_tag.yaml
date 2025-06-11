@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - hotfix
+permissions:
+  contents: write
 
 jobs:
   auto-tag:
