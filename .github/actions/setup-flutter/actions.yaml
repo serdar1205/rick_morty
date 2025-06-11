@@ -1,0 +1,28 @@
+name: Setup Flutter
+description: Checkout and setup Flutter with caching
+inputs:
+  flutter-version:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Get code
+    - uses: actions/checkout@v4
+
+    - name: Set up Flutter
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ inputs.flutter-version }}
+        cache: true
+
+    - name: Cache Flutter dependencies
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.pub-cache
+          .dart_tool
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: ${{ runner.os }}-flutter
+
+    - name: Install dependencies
+    - run: flutter pub get

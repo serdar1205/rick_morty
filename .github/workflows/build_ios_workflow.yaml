@@ -1,0 +1,32 @@
+name: Build ios ipa
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        required: true
+        default: '3.27.3'
+        type: string
+
+jobs:
+  build_ios:
+    runs-on: macos-latest
+
+    steps:
+      - uses: ./.github/actions/setup-flutter
+        with:
+          flutter-version: ${{ inputs.flutter-version }}
+
+      - name: Set up CocoaPods
+        run: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build IPA (debug mode for CI safety)
+        run: flutter build ios --no-codesign
+
+      - name: Upload iOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: build/ios/iphoneos/Runner.app
