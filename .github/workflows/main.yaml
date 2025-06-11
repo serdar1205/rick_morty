@@ -35,14 +35,14 @@ jobs:
   build-android:
     if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
     needs: run-test
-    uses: .github/workflows/build_android_workflow.yaml
+    uses: ./.github/workflows/build_android_workflow.yaml
     with:
       flutter-version: '3.27.3'
 
   build-ios:
     if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main'
     needs: run-test
-    uses: .github/workflows/build_ios_workflow.yaml
+    uses: ./.github/workflows/build_ios_workflow.yaml
     with:
       flutter-version: '3.27.3'
 
