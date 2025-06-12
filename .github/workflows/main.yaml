@@ -55,8 +55,6 @@ jobs:
   deploy-prod:
     needs: [ build-android, build-ios ]
     if: github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Production
-        run: echo "🚀 Deploying to production..."
+    uses: ./.github/workflows/deploy.yaml
+
 

@@ -1,0 +1,43 @@
+name: Deploy
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Android Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: ./dist/android
+
+      - name: Download iOS Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-app
+          path: ./dist/ios
+
+      - name: Extract version from pubspec.yaml
+        id: extract_version
+        run: |
+          version=$(grep '^version: ' pubspec.yaml | cut -d ' ' -f 2 | tr -d '\r')
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - name: Debug version
+        run:
+          echo "Extracted version: $VERSION"
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          artifacts: |
+            dist/android/app-release.apk
+            dist/ios/Runner.app
+          tag: v${{ env.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
