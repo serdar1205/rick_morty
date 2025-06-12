@@ -34,7 +34,7 @@ jobs:
 
   build-android:
     if: |
-      (github.event_name == 'push' && contains('main development hotfix release', github.ref_name)) ||
+      (github.event_name == 'push' && contains('release', github.ref_name)) ||
       (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
 
     needs: run-test
@@ -44,7 +44,7 @@ jobs:
 
   build-ios:
     if: |
-      (github.event_name == 'push' && contains('main development hotfix release', github.ref_name)) ||
+      (github.event_name == 'push' && contains('release', github.ref_name)) ||
       (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
 
     needs: run-test
@@ -54,7 +54,6 @@ jobs:
 
   deploy-prod:
     needs: [ build-android, build-ios ]
-    if: github.ref == 'refs/heads/main'
 
     uses: ./.github/workflows/deploy.yaml
 
