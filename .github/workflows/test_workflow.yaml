@@ -10,6 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+#r
       - uses: ./.github/actions/setup-flutter
         with:
           flutter-version: ${{ inputs.flutter-version }}

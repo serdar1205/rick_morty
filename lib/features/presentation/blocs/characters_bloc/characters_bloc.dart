@@ -32,7 +32,7 @@ class CharactersBloc extends Bloc<CharactersEvent, CharactersState> {
   final AddFavoritesUseCase _addFavoritesUseCase;
 
   final DeleteFavoriteOneUseCase _deleteFavoriteOneUseCase;
-
+//todo bloc optimize
   bool canLoad = true;
   List<CharacterEntity> _allCharacters = [];
 
