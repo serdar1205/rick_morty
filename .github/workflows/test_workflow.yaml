@@ -1,0 +1,24 @@
+name: Run test and Analyze
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-flutter
+        with:
+          flutter-version: ${{ inputs.flutter-version }}
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run test
+        run: flutter test
