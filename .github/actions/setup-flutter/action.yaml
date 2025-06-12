@@ -3,6 +3,7 @@ description: Checkout and setup Flutter with caching
 inputs:
   flutter-version:
     required: true
+
 runs:
   using: "composite"
   steps:
@@ -17,9 +18,10 @@ runs:
       with:
         path: |
           ~/.pub-cache
-          .dart_tool
-        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
-        restore-keys: ${{ runner.os }}-flutter
+          .dart_tool/package_config.json
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-flutter-
 
     - name: Install dependencies
       run: flutter pub get
