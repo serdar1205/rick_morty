@@ -25,13 +25,8 @@ on:
 jobs:
   run-test:
     if: |
-      (
-        github.event_name == 'push' && github.ref != 'refs/heads/main'
-      ) || (
-        github.event_name == 'pull_request' &&
-        contains('opened', github.event.action) &&
-        github.base_ref != 'main'
-      )
+      (github.event_name == 'push' && contains('main development hotfix release', github.ref_name))
+
     uses: ./.github/workflows/test_workflow.yaml
     with:
       flutter-version: '3.27.3'
