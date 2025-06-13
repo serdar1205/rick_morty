@@ -57,7 +57,7 @@ jobs:
       flutter-version: '3.27.3'
 
   deploy-prod:
-#    needs: [ build-android, build-ios ]
+    needs: [ build-android, build-ios ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     uses: ./.github/workflows/deploy.yaml
