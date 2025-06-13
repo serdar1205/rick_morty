@@ -38,8 +38,8 @@ jobs:
 
   build-android:
     if: |
-      (github.event_name == 'push' && contains('development hotfix release', github.ref_name)) ||
-      (github.event_name == 'pull_request' && contains('development hotfix release', github.base_ref))
+      (github.event_name == 'push' && contains('main development hotfix release', github.ref_name)) ||
+      (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
 
     needs: run-test
     uses: ./.github/workflows/build_android.yaml
@@ -48,8 +48,8 @@ jobs:
 
   build-ios:
     if: |
-      (github.event_name == 'push' && contains('development hotfix release', github.ref_name)) ||
-      (github.event_name == 'pull_request' && contains('development hotfix release', github.base_ref))
+      (github.event_name == 'push' && contains('main development hotfix release', github.ref_name)) ||
+      (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
 
     needs: run-test
     uses: ./.github/workflows/build_ios.yaml
