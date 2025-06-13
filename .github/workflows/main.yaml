@@ -25,35 +25,40 @@ on:
 jobs:
   run-test:
     if: |
-      (github.event_name == 'push' && github.ref != 'refs/heads/main') ||
-      (github.event_name == 'pull_request' && contains('opened,synchronize', github.event.action))
-
+      (
+        github.event_name == 'push' && github.ref != 'refs/heads/main'
+      ) || (
+        github.event_name == 'pull_request' &&
+        contains('opened,synchronize', github.event.action) &&
+        github.base_ref != 'main'
+      )
     uses: ./.github/workflows/test_workflow.yaml
     with:
       flutter-version: '3.27.3'
 
   build-android:
     if: |
-      (github.event_name == 'push' && contains('release', github.ref_name)) ||
-      (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
+      (github.event_name == 'push' && contains('development hotfix release', github.ref_name)) ||
+      (github.event_name == 'pull_request' && contains('development hotfix release', github.base_ref))
 
     needs: run-test
-    uses: ./.github/workflows/build_android_workflow.yaml
+    uses: ./.github/workflows/build_android.yaml
     with:
       flutter-version: '3.27.3'
 
   build-ios:
     if: |
-      (github.event_name == 'push' && contains('release', github.ref_name)) ||
-      (github.event_name == 'pull_request' && contains('main development hotfix release', github.base_ref))
+      (github.event_name == 'push' && contains('development hotfix release', github.ref_name)) ||
+      (github.event_name == 'pull_request' && contains('development hotfix release', github.base_ref))
 
     needs: run-test
-    uses: ./.github/workflows/build_ios_workflow.yaml
+    uses: ./.github/workflows/build_ios.yaml
     with:
       flutter-version: '3.27.3'
 
   deploy-prod:
 #    needs: [ build-android, build-ios ]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     uses: ./.github/workflows/deploy.yaml
 
