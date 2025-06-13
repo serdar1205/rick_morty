@@ -12,6 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: List artifacts (debug)
+        run: gh run artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List directory before download
+        run: ls -R .
+
       - name: Download Android Artifact
         uses: actions/download-artifact@v4
         with:
