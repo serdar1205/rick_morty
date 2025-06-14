@@ -34,6 +34,6 @@ jobs:
         with:
           artifacts: |
             dist/android/app-release.apk
-            dist/ios/iphoneos/Runner.app
+            dist/ios/Runner.app
           tag: v${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
